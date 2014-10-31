@@ -3,4 +3,5 @@
  */
 public enum SQLEnum {
     public int localX;
+  private int remoteX;
 }

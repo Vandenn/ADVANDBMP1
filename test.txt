@@ -1,5 +1,0 @@
-asdfasdf
-
-local edit
-remote edit
-

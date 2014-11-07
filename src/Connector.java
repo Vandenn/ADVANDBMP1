@@ -17,7 +17,7 @@ public class Connector {
     private String pName = "northwind";
     private String pDriver = "com.mysql.jdbc.Driver";
     private String pUser = "root";
-    private String pPass = "p@ssword";
+    private String pPass = "1234";
     
     /**
      * Constructor.
@@ -56,13 +56,14 @@ public class Connector {
             rs = s.executeQuery(se.toString());
             long end = System.nanoTime(); //end tme
             long duration  = end - start;
+            double seconds = (double) duration / 1000000000.0;
             
             /*Print out time of execution*/
             System.out.println("==================");
             System.out.println("Query executed:");
             System.out.println(se.toString() + "\n");
             System.out.println("Time of execution:");
-            System.out.println(duration);
+            System.out.println(seconds + " seconds");
             System.out.println("==================");
             
             return rs; //return result

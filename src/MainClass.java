@@ -11,7 +11,8 @@ public class MainClass {
     public static void main(String args[])
     {
         Connector c = new Connector();
-        c.issueQuery(SQLEnum.ORIGINAL);
+        c.issueQuery(SQLEnum.ORIGINAL4);
+        c.issueQuery(SQLEnum.OPTIMIZED4);
     }
     
 }

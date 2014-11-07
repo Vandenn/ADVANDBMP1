@@ -10,7 +10,8 @@ public class MainClass {
     
     public static void main(String args[])
     {
-        System.out.println("ADVANDB MP1");
+        Connector c = new Connector();
+        c.issueQuery(SQLEnum.ORIGINAL);
     }
     
 }

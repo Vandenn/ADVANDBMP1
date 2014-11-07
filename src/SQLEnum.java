@@ -14,7 +14,10 @@ public enum SQLEnum {
             case OPTIMIZED:
                 return "SELECT * FROM employees";
             case STORED:
-                return "SELECT * FROM employees";
+                return "() " +
+                    "BEGIN " +
+                    "DECLARE test INT; " +
+                    "END";
             default:
                 return "SELECT * FROM employees";
         }

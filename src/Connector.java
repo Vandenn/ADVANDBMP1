@@ -81,37 +81,33 @@ public class Connector {
      * Function to create a stored procedure in the database.
      * @param procName Name of the procedure to be created.
      * @param SE SQL statements to be placed in the procedure.
-     * @return Result of the procedure call.
      */
-    public ResultSet createStoredProcedure(String procName, SQLEnum SE)
+    public void createStoredProcedure(String procName, SQLEnum SE)
     {
         try
         {
             s.execute("DROP PROCEDURE IF EXISTS " + procName);
             s.executeUpdate("CREATE PROCEDURE " +
                 procName +
-                " BEGIN " +
-                SE.toString() +
-                "; END");
-            return executeStoredProcedure(procName);
+                SE.toString());
         }
         catch (Exception e)
         {
             System.err.println(e.getMessage());
-            return null;
         }
     }
     
     /**
      * Function to call a stored procedure in the database.
      * @param procName Name of procedure to be called.
+     * @param procParam Parameters to be passed to the stored procedure.
      * @return Result of the procedure.
      */
-    public ResultSet executeStoredProcedure(String procName)
+    public ResultSet executeStoredProcedure(String procName, String procParam)
     {
         try
         {
-            cs = conn.prepareCall("{call " + procName + "()}");
+            cs = conn.prepareCall("{call " + procName + "(" + procParam + ")}");
             
             long start = System.nanoTime(); //start time
             rs = cs.executeQuery();

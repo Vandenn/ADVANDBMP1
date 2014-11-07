@@ -11,6 +11,7 @@ public class Connector {
     private Statement s = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
+    private CallableStatement cs = null;
     
     /*String Variables for Connecting to SQL*/
     private String pUrl = "jdbc:mysql://localhost:3306/";
@@ -76,4 +77,62 @@ public class Connector {
         }
     }
     
+    /**
+     * Function to create a stored procedure in the database.
+     * @param procName Name of the procedure to be created.
+     * @param SE SQL statements to be placed in the procedure.
+     * @return Result of the procedure call.
+     */
+    public ResultSet createStoredProcedure(String procName, SQLEnum SE)
+    {
+        try
+        {
+            s.execute("DROP PROCEDURE IF EXISTS " + procName);
+            s.executeUpdate("CREATE PROCEDURE " +
+                procName +
+                " BEGIN " +
+                SE.toString() +
+                "; END");
+            return executeStoredProcedure(procName);
+        }
+        catch (Exception e)
+        {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+    
+    /**
+     * Function to call a stored procedure in the database.
+     * @param procName Name of procedure to be called.
+     * @return Result of the procedure.
+     */
+    public ResultSet executeStoredProcedure(String procName)
+    {
+        try
+        {
+            cs = conn.prepareCall("{call " + procName + "()}");
+            
+            long start = System.nanoTime(); //start time
+            rs = cs.executeQuery();
+            long end = System.nanoTime(); //end tme
+            long duration  = end - start;
+            
+            /*Print out time of execution*/
+            System.out.println("==================");
+            System.out.println("Procedure executed:");
+            System.out.println(procName + "\n");
+            System.out.println("Time of execution:");
+            System.out.println("Nanoseconds - " + duration);
+            System.out.println("Milliseconds - " + (float) duration / 1000000);
+            System.out.println("Seconds - " + (float) duration / 1000000000);
+            System.out.println("==================");
+            return rs;
+        }
+        catch (Exception e)
+        {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
 }

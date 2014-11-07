@@ -62,7 +62,9 @@ public class Connector {
             System.out.println("Query executed:");
             System.out.println(se.toString() + "\n");
             System.out.println("Time of execution:");
-            System.out.println(duration);
+            System.out.println("Nanoseconds - " + duration);
+            System.out.println("Milliseconds - " + (float) duration / 1000000);
+            System.out.println("Seconds - " + (float) duration / 1000000000);
             System.out.println("==================");
             
             return rs; //return result

@@ -2,7 +2,7 @@
  * Enum to contain SQL Queries for faster accessing.
  */
 public enum SQLEnum {
-    ORIGINAL, OPTIMIZED;
+    ORIGINAL, OPTIMIZED, STORED;
     
     @Override
     public String toString()
@@ -12,6 +12,8 @@ public enum SQLEnum {
             case ORIGINAL:
                 return "SELECT * FROM employees";
             case OPTIMIZED:
+                return "SELECT * FROM employees";
+            case STORED:
                 return "SELECT * FROM employees";
             default:
                 return "SELECT * FROM employees";

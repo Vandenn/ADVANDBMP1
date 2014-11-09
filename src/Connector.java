@@ -20,6 +20,9 @@ public class Connector {
     private String pUser = "root";
     private String pPass = "p@ssword";
     
+    /*Number of trials for accurate measurement of time*/
+    private final int trials = 50;
+    
     /**
      * Constructor.
      */
@@ -53,19 +56,27 @@ public class Connector {
     {
         try
         {
-            long start = System.nanoTime(); //start time
-            rs = s.executeQuery(se.toString());
-            long end = System.nanoTime(); //end tme
-            long duration  = end - start;
+            long duration = 0;
+            double fDuration = 0;
+            
+            for(int i = 0; i < trials; i++)
+            {
+                long start = System.nanoTime(); //start time
+                rs = s.executeQuery(se.toString());
+                long end = System.nanoTime(); //end tme
+                if(i != 0) //ignore first trial due to possible spike
+                    duration += (end - start);
+            }
+            fDuration = duration / trials;
             
             /*Print out time of execution*/
             System.out.println("==================");
             System.out.println("Query executed:");
             System.out.println(se.toString() + "\n");
             System.out.println("Time of execution:");
-            System.out.println("Nanoseconds - " + duration);
-            System.out.println("Milliseconds - " + (float) duration / 1000000);
-            System.out.println("Seconds - " + (float) duration / 1000000000);
+            System.out.println("Nanoseconds - " + fDuration);
+            System.out.println("Milliseconds - " + fDuration / 1000000);
+            System.out.println("Seconds - " + fDuration / 1000000000);
             System.out.println("==================");
             
             return rs; //return result
@@ -90,6 +101,10 @@ public class Connector {
             s.executeUpdate("CREATE PROCEDURE " +
                 procName +
                 SE.toString());
+            System.out.println("==================");
+            System.out.println("Created stored procedure:");
+            System.out.println(procName);
+            System.out.println("==================");
         }
         catch (Exception e)
         {
@@ -109,19 +124,27 @@ public class Connector {
         {
             cs = conn.prepareCall("{call " + procName + "(" + procParam + ")}");
             
-            long start = System.nanoTime(); //start time
-            rs = cs.executeQuery();
-            long end = System.nanoTime(); //end tme
-            long duration  = end - start;
+            long duration = 0;
+            double fDuration = 0;
+            
+            for(int i = 0; i < trials; i++)
+            {
+                long start = System.nanoTime(); //start time
+                rs = cs.executeQuery();
+                long end = System.nanoTime(); //end tme
+                if(i != 0) //ignore first trial due to possible spike
+                    duration += (end - start);
+            }
+            fDuration = duration / trials;
             
             /*Print out time of execution*/
             System.out.println("==================");
             System.out.println("Procedure executed:");
             System.out.println(procName + "\n");
             System.out.println("Time of execution:");
-            System.out.println("Nanoseconds - " + duration);
-            System.out.println("Milliseconds - " + (float) duration / 1000000);
-            System.out.println("Seconds - " + (float) duration / 1000000000);
+            System.out.println("Nanoseconds - " + fDuration);
+            System.out.println("Milliseconds - " + fDuration / 1000000);
+            System.out.println("Seconds - " + fDuration / 1000000000);
             System.out.println("==================");
             return rs;
         }

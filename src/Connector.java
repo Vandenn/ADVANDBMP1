@@ -20,6 +20,9 @@ public class Connector {
     private String pUser = "root";
     private String pPass = "p@ssword";
     
+    /*Number of trials for accurate measurement of time*/
+    private final int trials = 50;
+    
     /**
      * Constructor.
      */
@@ -53,19 +56,27 @@ public class Connector {
     {
         try
         {
-            long start = System.nanoTime(); //start time
-            rs = s.executeQuery(se.toString());
-            long end = System.nanoTime(); //end tme
-            long duration  = end - start;
+            long duration = 0;
+            double fDuration = 0;
+            
+            for(int i = 0; i < trials; i++)
+            {
+                long start = System.nanoTime(); //start time
+                rs = s.executeQuery(se.toString());
+                long end = System.nanoTime(); //end tme
+                if(i != 0) //ignore first trial due to possible spike
+                    duration += (end - start);
+            }
+            fDuration = duration / trials;
             
             /*Print out time of execution*/
             System.out.println("==================");
             System.out.println("Query executed:");
             System.out.println(se.toString() + "\n");
             System.out.println("Time of execution:");
-            System.out.println("Nanoseconds - " + duration);
-            System.out.println("Milliseconds - " + (float) duration / 1000000);
-            System.out.println("Seconds - " + (float) duration / 1000000000);
+            System.out.println("Nanoseconds - " + fDuration);
+            System.out.println("Milliseconds - " + fDuration / 1000000);
+            System.out.println("Seconds - " + fDuration / 1000000000);
             System.out.println("==================");
             
             return rs; //return result
@@ -81,51 +92,59 @@ public class Connector {
      * Function to create a stored procedure in the database.
      * @param procName Name of the procedure to be created.
      * @param SE SQL statements to be placed in the procedure.
-     * @return Result of the procedure call.
      */
-    public ResultSet createStoredProcedure(String procName, SQLEnum SE)
+    public void createStoredProcedure(String procName, SQLEnum SE)
     {
         try
         {
             s.execute("DROP PROCEDURE IF EXISTS " + procName);
             s.executeUpdate("CREATE PROCEDURE " +
                 procName +
-                " BEGIN " +
-                SE.toString() +
-                "; END");
-            return executeStoredProcedure(procName);
+                SE.toString());
+            System.out.println("==================");
+            System.out.println("Created stored procedure:");
+            System.out.println(procName);
+            System.out.println("==================");
         }
         catch (Exception e)
         {
             System.err.println(e.getMessage());
-            return null;
         }
     }
     
     /**
      * Function to call a stored procedure in the database.
      * @param procName Name of procedure to be called.
+     * @param procParam Parameters to be passed to the stored procedure.
      * @return Result of the procedure.
      */
-    public ResultSet executeStoredProcedure(String procName)
+    public ResultSet executeStoredProcedure(String procName, String procParam)
     {
         try
         {
-            cs = conn.prepareCall("{call " + procName + "()}");
+            cs = conn.prepareCall("{call " + procName + "(" + procParam + ")}");
             
-            long start = System.nanoTime(); //start time
-            rs = cs.executeQuery();
-            long end = System.nanoTime(); //end tme
-            long duration  = end - start;
+            long duration = 0;
+            double fDuration = 0;
+            
+            for(int i = 0; i < trials; i++)
+            {
+                long start = System.nanoTime(); //start time
+                rs = cs.executeQuery();
+                long end = System.nanoTime(); //end tme
+                if(i != 0) //ignore first trial due to possible spike
+                    duration += (end - start);
+            }
+            fDuration = duration / trials;
             
             /*Print out time of execution*/
             System.out.println("==================");
             System.out.println("Procedure executed:");
             System.out.println(procName + "\n");
             System.out.println("Time of execution:");
-            System.out.println("Nanoseconds - " + duration);
-            System.out.println("Milliseconds - " + (float) duration / 1000000);
-            System.out.println("Seconds - " + (float) duration / 1000000000);
+            System.out.println("Nanoseconds - " + fDuration);
+            System.out.println("Milliseconds - " + fDuration / 1000000);
+            System.out.println("Seconds - " + fDuration / 1000000000);
             System.out.println("==================");
             return rs;
         }

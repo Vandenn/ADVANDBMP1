@@ -11,7 +11,13 @@ public class MainClass {
     public static void main(String args[])
     {
         Connector c = new Connector();
+        
+        System.out.println("++ORIGINAL++");
         c.issueQuery(SQLEnum.ORIGINAL);
+        System.out.println("++OPTIMIZED++");
+        c.issueQuery(SQLEnum.OPTIMIZED);
+        System.out.println("++OPTSTORED++");
+        c.issueQuery(SQLEnum.OPTSTORED);
     }
     
 }

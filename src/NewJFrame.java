@@ -17,8 +17,10 @@ public class NewJFrame extends javax.swing.JFrame {
         initComponents();
         
         c. createStoredProcedure("query_a",SQLEnum.STORED1);
-         c. createStoredProcedure("query_b",SQLEnum.STORED1);
-          c. createStoredProcedure("query_c",SQLEnum.STORED1);
+        c. createStoredProcedure("query_b",SQLEnum.STORED2);
+        c. createStoredProcedure("query_c",SQLEnum.STORED3);
+        c. createStoredProcedure("query_d",SQLEnum.STORED4);
+        c. createStoredProcedure("query_e",SQLEnum.STORED5);
  
 
     }
@@ -39,9 +41,10 @@ public class NewJFrame extends javax.swing.JFrame {
         Query3 = new javax.swing.JButton();
         Category = new javax.swing.JTextField();
         Query4 = new javax.swing.JButton();
-        jTextField4 = new javax.swing.JTextField();
+        Package = new javax.swing.JTextField();
         Query5 = new javax.swing.JButton();
-        jTextField5 = new javax.swing.JTextField();
+        LastName = new javax.swing.JTextField();
+        FirstName = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,11 +87,18 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
-        jTextField4.setText("jTextField1");
+        Package.setText("United Package");
 
         Query5.setText("Query 5");
+        Query5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Query5ActionPerformed(evt);
+            }
+        });
 
-        jTextField5.setText("jTextField1");
+        LastName.setText("Suyama");
+
+        FirstName.setText("Michael");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -102,13 +112,9 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(Query1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                        .addComponent(Package, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(Query4))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(Query5))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(Country)
@@ -116,7 +122,15 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(Query3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(Query2, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(Query2, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(Query5))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(FirstName, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(LastName, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE))
+                        .addGap(89, 89, 89)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -136,13 +150,15 @@ public class NewJFrame extends javax.swing.JFrame {
                     .addComponent(Category, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Query4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Package, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Query4))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Query5)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(87, Short.MAX_VALUE))
+                .addComponent(LastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(FirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Query5)
+                .addGap(25, 25, 25))
         );
 
         Report.getAccessibleContext().setAccessibleName("Report");
@@ -194,7 +210,7 @@ public class NewJFrame extends javax.swing.JFrame {
                         "	WHERE supplierid IN (SELECT supplierid\n" +
                         "                           FROM suppliers\n" +
                         "                           WHERE country = '" + Country.getText() + "');");
-        System.out.println("++OPTSTORED++");
+        System.out.println("++OPTSTORED++" + "CALL query_b('" + Country.getText() + "')");
         c.issueQuery2("CALL query_b('" + Country.getText() + "')");
     }//GEN-LAST:event_Query2ActionPerformed
 
@@ -219,8 +235,45 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_Query3ActionPerformed
 
     private void Query4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Query4ActionPerformed
+        System.out.println("++ORIGINAL++");
+        c.issueQuery2("SELECT C.customerid\n" +
+                        "FROM customers C\n" +
+                        "WHERE C.customerid IN (SELECT O.customerid\n" +
+                        "				FROM orders O\n" +
+                        "				WHERE O.employeeid IN (SELECT employeeid\n" +
+                        "						FROM employees E1\n" +
+                        "						WHERE E1.hiredate < (SELECT hiredate\n" +
+                        "								FROM employees E2\n" +
+                        "								WHERE E2.lastname = '"+LastName.getText()+"'\n" +
+                        "                                                               and E2.firstname = '"+FirstName.getText()+"'))\n" +
+                        "				and O.shipvia IN (SELECT shipperid\n" +
+                        "					FROM shippers S\n" +
+                        "					WHERE S.companyname = '"+Package.getText()+"')); ");
+        System.out.println("++OPTIMIZED++");
+        c.issueQuery2("SELECT DISTINCT O.customerid \n" +
+                        "FROM orders O\n" +
+                        "WHERE O.employeeid IN (SELECT employeeid\n" +
+                        "				FROM employees E1\n" +
+                        "				WHERE E1.hiredate < (SELECT hiredate\n" +
+                        "							      FROM employees E2\n" +
+                        "							      WHERE E2.lastname = '"+LastName.getText()+"'\n" +
+                        "                                                               and E2.firstname = '"+FirstName.getText()+"'))\n" +
+                        "	and O.shipvia IN (SELECT shipperid\n" +
+                        "			       FROM shippers S\n" +
+                        "			       WHERE S.companyname = '"+Package.getText()+"');\n");
+        System.out.println("++OPTSTORED++");
+        c.issueQuery2("CALL query_d('"+LastName.getText()+"','"+FirstName.getText()+"','"+Package.getText()+"')");
        
     }//GEN-LAST:event_Query4ActionPerformed
+
+    private void Query5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Query5ActionPerformed
+         System.out.println("++ORIGINAL++");
+        c.issueQuery(SQLEnum.ORIGINAL5);
+        System.out.println("++OPTIMIZED++");
+        c.issueQuery(SQLEnum.OPTIMIZED5);
+        System.out.println("++OPTSTORED++");
+        c.issueQuery2("CALL query_e()");
+    }//GEN-LAST:event_Query5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -261,14 +314,15 @@ public class NewJFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Category;
     private javax.swing.JTextField Country;
+    private javax.swing.JTextField FirstName;
+    private javax.swing.JTextField LastName;
+    private javax.swing.JTextField Package;
     private javax.swing.JButton Query1;
     private javax.swing.JButton Query2;
     private javax.swing.JButton Query3;
     private javax.swing.JButton Query4;
     private javax.swing.JButton Query5;
     private javax.swing.JTextField Report;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
     Connector c = new Connector();
      

@@ -180,15 +180,39 @@ public enum SQLEnum {
 "\n" +
 "	END";
             case STORED4:
-                return "() " +
-                    "BEGIN " +
-                    "DECLARE test INT; " +
-                    "END";
+                return "(last_name VARCHAR(50), first_name VARCHAR(50), company_name VARCHAR(50))\n" +
+"\n" +
+"BEGIN\n" +
+"\n" +
+"	SELECT DISTINCT O.customerid \n" +
+"	FROM orders O\n" +
+"	WHERE O.employeeid IN (SELECT employeeid\n" +
+"					FROM employees E1\n" +
+"					WHERE E1.hiredate < (SELECT hiredate\n" +
+"								FROM employees E2\n" +
+"								WHERE E2.lastname = \n" +
+"last_name\n" +
+"								and E2.firstname = \n" +
+"first_name))\n" +
+"		    and O.shipvia IN (SELECT shipperid\n" +
+"					FROM shippers S\n" +
+"					WHERE S.companyname = company_name);\n" +
+"\n" +
+"	END ";
+                
             case STORED5:
                 return "() " +
-                    "BEGIN " +
-                    "DECLARE test INT; " +
-                    "END";
+"	BEGIN\n" +
+"\n" +
+"SELECT S.companyname, P1.productname \n" +
+"FROM suppliers S, products P1\n" +
+"WHERE S.supplierid = P1.supplierid and \n" +
+"	 	    P1.discontinued = 'no' and \n" +
+"	  	     P1.unitprice = (SELECT min(unitprice)\n" +
+"				        FROM products P2\n" +
+"				        WHERE P1.supplierid =  P2.supplierid);\n" +
+"\n" +
+"	END";
  
             case OPTSTORED:
                 return "CALL query_c('Seafood');";

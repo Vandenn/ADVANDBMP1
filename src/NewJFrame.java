@@ -15,13 +15,12 @@ public class NewJFrame extends javax.swing.JFrame {
      */
     public NewJFrame() {
         initComponents();
-        
-        c. createStoredProcedure("query_a",SQLEnum.STORED1);
-        c. createStoredProcedure("query_b",SQLEnum.STORED2);
-        c. createStoredProcedure("query_c",SQLEnum.STORED3);
-        c. createStoredProcedure("query_d",SQLEnum.STORED4);
-        c. createStoredProcedure("query_e",SQLEnum.STORED5);
- 
+
+        c.createStoredProcedure("query_a", SQLEnum.STORED1);
+        c.createStoredProcedure("query_b", SQLEnum.STORED2);
+        c.createStoredProcedure("query_c", SQLEnum.STORED3);
+        c.createStoredProcedure("query_d", SQLEnum.STORED4);
+        c.createStoredProcedure("query_e", SQLEnum.STORED5);
 
     }
 
@@ -178,96 +177,96 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void Query1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Query1ActionPerformed
         System.out.println("++ORIGINAL++");
-        c.issueQuery2("SELECT DISTINCT customerid\n" + "FROM orders\n" +
-                        "WHERE employeeid IN (SELECT employeeid \n" +
-                        "			      FROM employees\n" +
-                        "			      WHERE reportsto = (SELECT employeeid\n" +
-                        "       FROM employees\n" +
-                        "       WHERE title = '" + Report.getText() + "'))"); 
+        c.issueQuery2("SELECT DISTINCT customerid\n" + "FROM orders\n"
+                + "WHERE employeeid IN (SELECT employeeid \n"
+                + "			      FROM employees\n"
+                + "			      WHERE reportsto = (SELECT employeeid\n"
+                + "       FROM employees\n"
+                + "       WHERE title = '" + Report.getText() + "'))");
         System.out.println("++OPTIMIZED++");
-        c.issueQuery2("SELECT DISTINCT O.customerid\n" +
-                        "FROM orders O,employees E\n" +
-                        "WHERE O.employeeid = E.employeeid and\n" +
-                        "	    E.reportsto = (SELECT employeeid\n" +
-                        "     FROM employees\n" +
-                        "     WHERE title = '" + Report.getText() + "')");
+        c.issueQuery2("SELECT DISTINCT O.customerid\n"
+                + "FROM orders O,employees E\n"
+                + "WHERE O.employeeid = E.employeeid and\n"
+                + "	    E.reportsto = (SELECT employeeid\n"
+                + "     FROM employees\n"
+                + "     WHERE title = '" + Report.getText() + "')");
         System.out.println("++OPTSTORED++");
         c.issueQuery2("CALL query_a('" + Report.getText() + "')");
     }//GEN-LAST:event_Query1ActionPerformed
 
     private void Query2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Query2ActionPerformed
         System.out.println("++ORIGINAL++");
-        c.issueQuery2("	SELECT productname \n" +
-                        "	FROM products\n" +
-                        "	WHERE productid IN (SELECT productid\n" +
-                        "				FROM products\n" +
-                        "				WHERE supplierid IN (SELECT supplierid\n" +
-                        "                                                   FROM suppliers\n" +
-                        "                                                   WHERE country = '" + Country.getText() + "'));"); 
+        c.issueQuery2("	SELECT productname \n"
+                + "	FROM products\n"
+                + "	WHERE productid IN (SELECT productid\n"
+                + "				FROM products\n"
+                + "				WHERE supplierid IN (SELECT supplierid\n"
+                + "                                                   FROM suppliers\n"
+                + "                                                   WHERE country = '" + Country.getText() + "'));");
         System.out.println("++OPTIMIZED++");
-        c.issueQuery2("        SELECT productname\n" +
-                        "	FROM products\n" +
-                        "	WHERE supplierid IN (SELECT supplierid\n" +
-                        "                           FROM suppliers\n" +
-                        "                           WHERE country = '" + Country.getText() + "');");
+        c.issueQuery2("        SELECT productname\n"
+                + "	FROM products\n"
+                + "	WHERE supplierid IN (SELECT supplierid\n"
+                + "                           FROM suppliers\n"
+                + "                           WHERE country = '" + Country.getText() + "');");
         System.out.println("++OPTSTORED++" + "CALL query_b('" + Country.getText() + "')");
         c.issueQuery2("CALL query_b('" + Country.getText() + "')");
     }//GEN-LAST:event_Query2ActionPerformed
 
     private void Query3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Query3ActionPerformed
         System.out.println("++ORIGINAL++");
-        c.issueQuery2("SELECT companyname\n" +
-                        "	FROM suppliers\n" +
-                        "	WHERE supplierid IN (SELECT supplierid\n" +
-                        "				    FROM products\n" +
-                        "				    WHERE categoryid = (SELECT categoryid\n" +
-                        "							    FROM categories\n" +
-                        "							    WHERE categoryname = '" + Category.getText() + "'));"); 
+        c.issueQuery2("SELECT companyname\n"
+                + "	FROM suppliers\n"
+                + "	WHERE supplierid IN (SELECT supplierid\n"
+                + "				    FROM products\n"
+                + "				    WHERE categoryid = (SELECT categoryid\n"
+                + "							    FROM categories\n"
+                + "							    WHERE categoryname = '" + Category.getText() + "'));");
         System.out.println("++OPTIMIZED++");
-        c.issueQuery2("SELECT S.companyname\n" +
-                        "FROM suppliers S, products P\n" +
-                        "WHERE P.categoryid = (SELECT categoryid\n" +
-                        "			FROM categories C\n" +
-                        "                       WHERE C.categoryname = '" + Category.getText() + "')\n" +
-                        "		        and S.supplierid = P.supplierid");
+        c.issueQuery2("SELECT S.companyname\n"
+                + "FROM suppliers S, products P\n"
+                + "WHERE P.categoryid = (SELECT categoryid\n"
+                + "			FROM categories C\n"
+                + "                       WHERE C.categoryname = '" + Category.getText() + "')\n"
+                + "		        and S.supplierid = P.supplierid");
         System.out.println("++OPTSTORED++");
         c.issueQuery2("CALL query_c('" + Category.getText() + "')");
     }//GEN-LAST:event_Query3ActionPerformed
 
     private void Query4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Query4ActionPerformed
         System.out.println("++ORIGINAL++");
-        c.issueQuery2("SELECT C.customerid\n" +
-                        "FROM customers C\n" +
-                        "WHERE C.customerid IN (SELECT O.customerid\n" +
-                        "				FROM orders O\n" +
-                        "				WHERE O.employeeid IN (SELECT employeeid\n" +
-                        "						FROM employees E1\n" +
-                        "						WHERE E1.hiredate < (SELECT hiredate\n" +
-                        "								FROM employees E2\n" +
-                        "								WHERE E2.lastname = '"+LastName.getText()+"'\n" +
-                        "                                                               and E2.firstname = '"+FirstName.getText()+"'))\n" +
-                        "				and O.shipvia IN (SELECT shipperid\n" +
-                        "					FROM shippers S\n" +
-                        "					WHERE S.companyname = '"+Package.getText()+"')); ");
+        c.issueQuery2("SELECT C.customerid\n"
+                + "FROM customers C\n"
+                + "WHERE C.customerid IN (SELECT O.customerid\n"
+                + "				FROM orders O\n"
+                + "				WHERE O.employeeid IN (SELECT employeeid\n"
+                + "						FROM employees E1\n"
+                + "						WHERE E1.hiredate < (SELECT hiredate\n"
+                + "								FROM employees E2\n"
+                + "								WHERE E2.lastname = '" + LastName.getText() + "'\n"
+                + "                                                               and E2.firstname = '" + FirstName.getText() + "'))\n"
+                + "				and O.shipvia IN (SELECT shipperid\n"
+                + "					FROM shippers S\n"
+                + "					WHERE S.companyname = '" + Package.getText() + "')); ");
         System.out.println("++OPTIMIZED++");
-        c.issueQuery2("SELECT DISTINCT O.customerid \n" +
-                        "FROM orders O\n" +
-                        "WHERE O.employeeid IN (SELECT employeeid\n" +
-                        "				FROM employees E1\n" +
-                        "				WHERE E1.hiredate < (SELECT hiredate\n" +
-                        "							      FROM employees E2\n" +
-                        "							      WHERE E2.lastname = '"+LastName.getText()+"'\n" +
-                        "                                                               and E2.firstname = '"+FirstName.getText()+"'))\n" +
-                        "	and O.shipvia IN (SELECT shipperid\n" +
-                        "			       FROM shippers S\n" +
-                        "			       WHERE S.companyname = '"+Package.getText()+"');\n");
+        c.issueQuery2("SELECT DISTINCT O.customerid \n"
+                + "FROM orders O\n"
+                + "WHERE O.employeeid IN (SELECT employeeid\n"
+                + "				FROM employees E1\n"
+                + "				WHERE E1.hiredate < (SELECT hiredate\n"
+                + "							      FROM employees E2\n"
+                + "							      WHERE E2.lastname = '" + LastName.getText() + "'\n"
+                + "                                                               and E2.firstname = '" + FirstName.getText() + "'))\n"
+                + "	and O.shipvia IN (SELECT shipperid\n"
+                + "			       FROM shippers S\n"
+                + "			       WHERE S.companyname = '" + Package.getText() + "');\n");
         System.out.println("++OPTSTORED++");
-        c.issueQuery2("CALL query_d('"+LastName.getText()+"','"+FirstName.getText()+"','"+Package.getText()+"')");
-       
+        c.issueQuery2("CALL query_d('" + LastName.getText() + "','" + FirstName.getText() + "','" + Package.getText() + "')");
+
     }//GEN-LAST:event_Query4ActionPerformed
 
     private void Query5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Query5ActionPerformed
-         System.out.println("++ORIGINAL++");
+        System.out.println("++ORIGINAL++");
         c.issueQuery(SQLEnum.ORIGINAL5);
         System.out.println("++OPTIMIZED++");
         c.issueQuery(SQLEnum.OPTIMIZED5);
@@ -309,7 +308,7 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Category;
@@ -325,5 +324,5 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JTextField Report;
     // End of variables declaration//GEN-END:variables
     Connector c = new Connector();
-     
+
 }

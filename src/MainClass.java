@@ -13,9 +13,9 @@ public class MainClass {
         Connector c = new Connector();
         
         System.out.println("++ORIGINAL++");
-        c.issueQuery(SQLEnum.ORIGINAL);
+        c.issueQuery(SQLEnum.ORIGINAL3);
         System.out.println("++OPTIMIZED++");
-        c.issueQuery(SQLEnum.OPTIMIZED);
+        c.issueQuery(SQLEnum.OPTIMIZED3);
         System.out.println("++OPTSTORED++");
         c.issueQuery(SQLEnum.OPTSTORED);
     }

@@ -18,10 +18,10 @@ public class Connector {
     private String pName = "northwind";
     private String pDriver = "com.mysql.jdbc.Driver";
     private String pUser = "root";
-    private String pPass = "p@ssword";
+    private String pPass = "1234";
     
     /*Number of trials for accurate measurement of time*/
-    private final int trials = 50;
+    private final int trials = 1000;
     
     /**
      * Constructor.
@@ -58,16 +58,18 @@ public class Connector {
         {
             long duration = 0;
             double fDuration = 0;
-            
-            for(int i = 0; i < trials; i++)
+            int i;
+            for(i = 0; i < trials; i++)
             {
                 long start = System.nanoTime(); //start time
                 rs = s.executeQuery(se.toString());
                 long end = System.nanoTime(); //end tme
                 if(i != 0) //ignore first trial due to possible spike
                     duration += (end - start);
+                Statement temp = conn.createStatement();
+                temp.executeQuery("flush query cache;");
             }
-            fDuration = duration / trials;
+            fDuration = duration / (trials - 1);
             
             /*Print out time of execution*/
             System.out.println("==================");
@@ -87,6 +89,47 @@ public class Connector {
             return null;
         }
     }
+    
+    public ResultSet issueQuery2(String se)
+    {
+        try
+        {
+            long duration = 0;
+            double fDuration = 0;
+            int i = 0;
+            
+            for(i = 0; i < trials; i++)
+            {
+                long start = System.nanoTime(); //start time
+                rs = s.executeQuery(se);
+                long end = System.nanoTime(); //end tme
+                if(i != 0) //ignore first trial due to possible spike
+                    duration += (end - start);
+                Statement temp = conn.createStatement();
+                temp.executeQuery("flush query cache;");
+            }
+            fDuration = duration / (trials - 1);
+            
+            /*Print out time of execution*/
+            System.out.println("==================");
+            System.out.println("Query executed:");
+            System.out.println(se + "\n");
+            System.out.println("Time of execution:");
+            System.out.println("Nanoseconds - " + fDuration);
+            System.out.println("Milliseconds - " + fDuration / 1000000);
+            System.out.println("Seconds - " + fDuration / 1000000000);
+            System.out.println("==================");
+            
+            
+            return rs; //return result
+        }
+        catch (Exception e)
+        {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+    
     
     /**
      * Function to create a stored procedure in the database.
@@ -134,8 +177,10 @@ public class Connector {
                 long end = System.nanoTime(); //end tme
                 if(i != 0) //ignore first trial due to possible spike
                     duration += (end - start);
+                Statement temp = conn.createStatement();
+                temp.executeQuery("flush query cache;");
             }
-            fDuration = duration / trials;
+            fDuration = duration / (trials-1);
             
             /*Print out time of execution*/
             System.out.println("==================");

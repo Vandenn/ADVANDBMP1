@@ -13,11 +13,11 @@ public class MainClass {
         Connector c = new Connector();
         
         System.out.println("++ORIGINAL++");
-        c.issueQuery(SQLEnum.ORIGINAL1);
+        c.issueQuery(SQLEnum.ORIGINAL3);
         System.out.println("++OPTIMIZED++");
-        c.issueQuery(SQLEnum.OPTIMIZED1);
-        c.createStoredProcedure("query_a", SQLEnum.STORED);
-        c.executeStoredProcedure("query_a", "");
+        c.issueQuery(SQLEnum.OPTIMIZED3);
+        System.out.println("++OPTSTORED++");
+        c.issueQuery(SQLEnum.OPTSTORED);
     }
     
 }
